@@ -5,7 +5,9 @@ import com.simulacion.distribuciones.core.Tabla;
 import com.simulacion.distribuciones.exponencialnegativa.domain.TablaExponencialNegativa;
 import com.simulacion.distribuciones.poisson.domain.TablaPoisson;
 import com.simulacion.distribuciones.uniformeab.domain.TablaUniformeAB;
+import com.simulacion.histogramalib.core.DistribucionEnum;
 import com.simulacion.histogramalib.core.Histograma;
+import com.simulacion.histogramalib.core.HistogramaFactory;
 
 import java.util.stream.Collectors;
 
@@ -20,7 +22,7 @@ public class Application {
         System.out.println(".: TABLA UNIFORME AB:.");
         System.out.println(tablaAB);
 
-        Histograma histograma = new Histograma(5);
+        Histograma histograma = HistogramaFactory.get(DistribucionEnum.UNIFORME_AB,5);
         histograma.generarHistograma(tablaAB.getIteraciones()
                 .stream()
                 .map(Iteracion::getValor)
@@ -34,7 +36,7 @@ public class Application {
         System.out.println(".: TABLA EXPONENCIAL NEGATIVA :.");
         System.out.println(tablaExpNegativa);
 
-        Histograma histograma1 = new Histograma(5);
+        Histograma histograma1 = HistogramaFactory.get(DistribucionEnum.EXPONENCIAL_NEGATIVA, 5);
         histograma1.generarHistograma(tablaExpNegativa.getIteraciones()
                 .stream()
                 .map(Iteracion::getValor)
@@ -49,7 +51,7 @@ public class Application {
         System.out.println(".: TABLA POISSON :.");
         System.out.println(tablaPoisson);
 
-        Histograma histograma2 = new Histograma(5);
+        Histograma histograma2 = HistogramaFactory.get(DistribucionEnum.EXPONENCIAL_NEGATIVA, 5);
         histograma2.generarHistograma(tablaPoisson.getIteraciones()
                 .stream()
                 .map(Iteracion::getValor)
