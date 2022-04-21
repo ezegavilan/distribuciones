@@ -1,17 +1,18 @@
 package com.simulacion.distribuciones.poisson.service;
 
 import com.simulacion.distribuciones.core.Tabla;
+import com.simulacion.distribuciones.poisson.api.model.GeneradorPoissonResponse;
+import com.simulacion.distribuciones.poisson.api.model.HistogramaPoissonDto;
+import com.simulacion.distribuciones.poisson.api.model.IntervaloPoissonDto;
 import com.simulacion.distribuciones.poisson.domain.TablaPoisson;
 import com.simulacion.distribuciones.poisson.service.in.GenerarDistribucionPoissonUseCase;
-import com.simulacion.distribuciones.pruebabondad.chicuadrado.service.in.PruebaChiCuadradoUseCase;
-import com.simulacion.distribuciones.shared.mapper.HistogramaIntervaloMapper;
 import com.simulacion.distribuciones.shared.mapper.TablaIteracionMapper;
-import com.simulacion.distribuciones.shared.model.GeneradorResponse;
-import com.simulacion.distribuciones.shared.model.HistogramaDto;
 import com.simulacion.distribuciones.shared.model.TablaDto;
 import com.simulacion.histogramalib.core.DistribucionEnum;
-import com.simulacion.histogramalib.core.Histograma;
 import com.simulacion.histogramalib.core.HistogramaFactory;
+import com.simulacion.histogramalib.core.Intervalo;
+import com.simulacion.histogramalib.core.poisson.HistogramaPoisson;
+import com.simulacion.histogramalib.core.poisson.IntervaloPoisson;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,31 +25,38 @@ import java.util.stream.Collectors;
 public class GenerarDistribucionPoissonService implements GenerarDistribucionPoissonUseCase {
     private final DistribucionEnum DISTRIBUCION = DistribucionEnum.POISSON;
     private final TablaIteracionMapper tablaIteracionMapper;
-    private final HistogramaIntervaloMapper histogramaIntervaloMapper;
-    private final PruebaChiCuadradoUseCase pruebaChiCuadradoUseCase;
 
     @Override
-    public GeneradorResponse generar(int n, float media, int cantidadIntervalos) {
+    public GeneradorPoissonResponse generar(int n, float media, int cantidadIntervalos) {
         Tabla tabla = this.crearTabla(n, media);
         List<Float> muestra = new ArrayList<>();
         tabla.getIteraciones().forEach(iteracion -> muestra.add(iteracion.getValor()));
 
-        HistogramaDto histogramaDto = this.crearHistograma(muestra, cantidadIntervalos);
-        return GeneradorResponse.builder()
-                .histogramaDto(histogramaDto)
-                .tablaDto(mapTabla(tabla)).build();
+        HistogramaPoissonDto histogramaDto = this.crearHistograma(muestra, cantidadIntervalos);
+        return GeneradorPoissonResponse.builder()
+                .histograma(histogramaDto)
+                .tabla(mapTabla(tabla)).build();
     }
 
-    private HistogramaDto crearHistograma(List<Float> muestra, int cantidadIntervalos) {
-        Histograma histograma = HistogramaFactory.get(DISTRIBUCION, cantidadIntervalos);
+    private HistogramaPoissonDto crearHistograma(List<Float> muestra, int cantidadIntervalos) {
+        HistogramaPoisson histograma = (HistogramaPoisson) HistogramaFactory.get(DISTRIBUCION, cantidadIntervalos);
         histograma.generarHistograma(muestra);
 
-        boolean pruebaChiCuadrado = pruebaChiCuadradoUseCase.validarHipotesis(DISTRIBUCION, histograma);
-
-        return HistogramaDto.builder()
-                .intervalos(histograma.getIntervalos().stream().map(histogramaIntervaloMapper::map).collect(Collectors.toList()))
-                .pruebaBondadChiCuadrado(pruebaChiCuadrado)
+        List<IntervaloPoissonDto> intervalos = new ArrayList<>();
+        for (Intervalo intervalo: histograma.getIntervalos()) {
+            intervalos.add(map((IntervaloPoisson) intervalo));
+        }
+        return HistogramaPoissonDto.builder()
+                .intervalos(intervalos)
                 .build();
+    }
+
+    private IntervaloPoissonDto map(IntervaloPoisson intervalo) {
+        return IntervaloPoissonDto.builder()
+                .intervalo(String.valueOf(intervalo.getIntervalo()))
+                .valor(String.valueOf(intervalo.getValor()))
+                .frecuencia(String.valueOf(intervalo.getFrecuencia()))
+                .frecuenciaEsperada(String.valueOf(intervalo.getFrecuenciaEsperadaPoisson())).build();
     }
 
     private Tabla crearTabla(int n, float media) {
