@@ -35,15 +35,15 @@ public class TablaPoisson extends Tabla {
 
     private float calcularValue(float rnd) {
         float p = 1;
-        int value = -1;
-        float a = (float) Math.exp(-media);
+        int x = -1;
+        float A = (float) Math.exp(-media);
 
         do {
-            p *= rnd;
-            value++;
-        } while (p > a);
+            p = p * rnd;
+            x = x + 1;
+        } while (p >= A);
 
-        return value;
+        return x;
     }
 
     @Override

@@ -3,6 +3,9 @@ package com.simulacion.distribuciones;
 import com.simulacion.distribuciones.core.Iteracion;
 import com.simulacion.distribuciones.core.Tabla;
 import com.simulacion.distribuciones.exponencialnegativa.domain.TablaExponencialNegativa;
+import com.simulacion.distribuciones.normal.BoxMuller;
+import com.simulacion.distribuciones.normal.IteracionNormal;
+import com.simulacion.distribuciones.normal.TablaNormal;
 import com.simulacion.distribuciones.poisson.domain.TablaPoisson;
 import com.simulacion.distribuciones.uniformeab.domain.TablaUniformeAB;
 import com.simulacion.histogramalib.core.DistribucionEnum;
@@ -46,12 +49,12 @@ public class Application {
         System.out.println(histograma1);
 
         System.out.println("\n------------------------------------------------------------------------");
-        Tabla tablaPoisson = new TablaPoisson(11);
-        tablaPoisson.generarTabla(50);
+        Tabla tablaPoisson = new TablaPoisson(3.57f);
+        tablaPoisson.generarTabla(10);
         System.out.println(".: TABLA POISSON :.");
         System.out.println(tablaPoisson);
 
-        Histograma histograma2 = HistogramaFactory.get(DistribucionEnum.EXPONENCIAL_NEGATIVA, 5);
+        Histograma histograma2 = HistogramaFactory.get(DistribucionEnum.POISSON, 5);
         histograma2.generarHistograma(tablaPoisson.getIteraciones()
                 .stream()
                 .map(Iteracion::getValor)
@@ -59,5 +62,20 @@ public class Application {
 
         System.out.println("\n.: HISTOGRAMA POISSON :.");
         System.out.println(histograma2);
+
+        System.out.println("\n------------------------------------------------------------------------");
+        TablaNormal boxMuller = new BoxMuller(11f, 0.3f);
+        boxMuller.generarTabla(300);
+        System.out.println(".: TABLA NORMAL - BOX MULLER :.");
+        System.out.println(boxMuller);
+
+        Histograma histoBoxMuller = HistogramaFactory.get(DistribucionEnum.NORMAL, 5);
+        histoBoxMuller.generarHistograma(boxMuller.getIteraciones()
+                .stream()
+                .map(IteracionNormal::getValor)
+                .collect(Collectors.toList()));
+
+        System.out.println("\n.: HISTOGRAMA NORMAL - BOX MULLER :.");
+        System.out.println(histoBoxMuller);
     }
 }
