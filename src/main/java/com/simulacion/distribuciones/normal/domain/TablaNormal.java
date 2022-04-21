@@ -1,6 +1,4 @@
-package com.simulacion.distribuciones.normal;
-
-import com.simulacion.distribuciones.core.Iteracion;
+package com.simulacion.distribuciones.normal.domain;
 
 import java.util.ArrayList;
 import java.util.List;

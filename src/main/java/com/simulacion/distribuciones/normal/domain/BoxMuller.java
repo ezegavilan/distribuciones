@@ -1,4 +1,4 @@
-package com.simulacion.distribuciones.normal;
+package com.simulacion.distribuciones.normal.domain;
 
 public class BoxMuller extends TablaNormal {
     private final float media;

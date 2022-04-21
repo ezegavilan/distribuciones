@@ -1,4 +1,4 @@
-package com.simulacion.distribuciones.normal;
+package com.simulacion.distribuciones.normal.domain;
 
 public class IteracionNormal {
     private final int iteracion;
