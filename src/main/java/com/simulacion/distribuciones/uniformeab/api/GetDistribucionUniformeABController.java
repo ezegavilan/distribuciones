@@ -31,7 +31,7 @@ public class GetDistribucionUniformeABController {
         GeneradorResponse generadorResponse = generarDistribucionUniformeABUseCase
                 .generar(request.getN(), request.getExtremoIzquierdo(), request.getExtremoDerecho(), request.getCantidadIntervalos());
 
-        response.put("response", generadorResponse);
+        response.put("generadorResponse", generadorResponse);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
