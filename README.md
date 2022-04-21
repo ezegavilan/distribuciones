@@ -1,5 +1,5 @@
 
-# Distribuciones Uniforme AB - Normal - Exponencial Negativa - Poisson
+# Generador de Distribuciones Uniforme AB - Normal - Exponencial Negativa - Poisson
 Este proyecto contiene la lógica de negocio y el componente WEB para el TP3 de Simulación: Generar distribuciones (uniforme ab, normal, exp. negativa y poisson).
 
 ## Run
