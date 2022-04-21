@@ -1,8 +1,8 @@
-package com.simulacion.distribuciones.exponencialnegativa.service;
+package com.simulacion.distribuciones.poisson.service;
 
 import com.simulacion.distribuciones.core.Tabla;
-import com.simulacion.distribuciones.exponencialnegativa.domain.TablaExponencialNegativa;
-import com.simulacion.distribuciones.exponencialnegativa.service.in.GenerarDistribucionExpNegativaUseCase;
+import com.simulacion.distribuciones.poisson.domain.TablaPoisson;
+import com.simulacion.distribuciones.poisson.service.in.GenerarDistribucionPoissonUseCase;
 import com.simulacion.distribuciones.pruebabondad.chicuadrado.service.in.PruebaChiCuadradoUseCase;
 import com.simulacion.distribuciones.shared.mapper.HistogramaIntervaloMapper;
 import com.simulacion.distribuciones.shared.mapper.TablaIteracionMapper;
@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class GenerarDistribucionExpNegativaService implements GenerarDistribucionExpNegativaUseCase {
-    private final DistribucionEnum DISTRIBUCION = DistribucionEnum.EXPONENCIAL_NEGATIVA;
+public class GenerarDistribucionPoissonService implements GenerarDistribucionPoissonUseCase {
+    private final DistribucionEnum DISTRIBUCION = DistribucionEnum.POISSON;
     private final TablaIteracionMapper tablaIteracionMapper;
     private final HistogramaIntervaloMapper histogramaIntervaloMapper;
     private final PruebaChiCuadradoUseCase pruebaChiCuadradoUseCase;
@@ -52,7 +52,7 @@ public class GenerarDistribucionExpNegativaService implements GenerarDistribucio
     }
 
     private Tabla crearTabla(int n, float media) {
-        Tabla tabla = new TablaExponencialNegativa(media);
+        Tabla tabla = new TablaPoisson(media);
         tabla.generarTabla(n);
         return tabla;
     }
