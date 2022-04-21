@@ -14,8 +14,7 @@ cd historama-lib
 mvn clean install
 ````
 
-Cuando se generen los paquetes de **distribuciones** (mvn clean package) se compilará también
-la librería **histograma-lib**.
+Cuando se compile **distribuciones** se compilará también la librería **histograma-lib**.
 
 ### 2. Ejecutar aplicación **distribuciones**
 En el directorio donde está el proyecto, ejecutar el siguiente comando:
@@ -25,3 +24,6 @@ mvn spring-boot:run
 ````
 
 La aplicación Web se ejecuta en el puerto **8080**.
+
+## Swagger
+Se encuentra disponible Swagger para la **API REST** en http://localhost:8080/api-docs
