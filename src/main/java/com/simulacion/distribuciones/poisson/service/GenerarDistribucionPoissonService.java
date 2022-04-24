@@ -6,6 +6,7 @@ import com.simulacion.distribuciones.poisson.api.model.HistogramaPoissonDto;
 import com.simulacion.distribuciones.poisson.api.model.IntervaloPoissonDto;
 import com.simulacion.distribuciones.poisson.domain.TablaPoisson;
 import com.simulacion.distribuciones.poisson.service.in.GenerarDistribucionPoissonUseCase;
+import com.simulacion.distribuciones.pruebabondad.chicuadrado.service.in.PruebaChiCuadradoUseCase;
 import com.simulacion.distribuciones.shared.mapper.TablaIteracionMapper;
 import com.simulacion.distribuciones.shared.model.TablaDto;
 import com.simulacion.histogramalib.core.DistribucionEnum;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 public class GenerarDistribucionPoissonService implements GenerarDistribucionPoissonUseCase {
     private final DistribucionEnum DISTRIBUCION = DistribucionEnum.POISSON;
     private final TablaIteracionMapper tablaIteracionMapper;
+    private final PruebaChiCuadradoUseCase pruebaChiCuadradoUseCase;
 
     @Override
     public GeneradorPoissonResponse generar(int n, float media, int cantidadIntervalos) {
@@ -35,7 +37,8 @@ public class GenerarDistribucionPoissonService implements GenerarDistribucionPoi
         HistogramaPoissonDto histogramaDto = this.crearHistograma(muestra, cantidadIntervalos);
         return GeneradorPoissonResponse.builder()
                 .histograma(histogramaDto)
-                .tabla(mapTabla(tabla)).build();
+                .tabla(mapTabla(tabla))
+                .pruebaBondadChiCuadrado(histogramaDto.isPruebaBondadChiCuadrado()).build();
     }
 
     private HistogramaPoissonDto crearHistograma(List<Float> muestra, int cantidadIntervalos) {
@@ -46,8 +49,12 @@ public class GenerarDistribucionPoissonService implements GenerarDistribucionPoi
         for (Intervalo intervalo: histograma.getIntervalos()) {
             intervalos.add(map((IntervaloPoisson) intervalo));
         }
+
+        boolean pruebaChiCuadrado = pruebaChiCuadradoUseCase.validarHipotesis(DISTRIBUCION, histograma);
+
         return HistogramaPoissonDto.builder()
                 .intervalos(intervalos)
+                .pruebaBondadChiCuadrado(pruebaChiCuadrado)
                 .build();
     }
 

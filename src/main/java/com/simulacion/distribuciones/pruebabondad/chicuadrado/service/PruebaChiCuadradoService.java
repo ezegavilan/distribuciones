@@ -18,6 +18,7 @@ public class PruebaChiCuadradoService implements PruebaChiCuadradoUseCase {
         int gradosLibertad = histogramaChiCuadrado.calcularGradosLibertad(distribucion);
 
         PruebaBondadChiCuadrado pruebaBondadChiCuadrado = new PruebaBondadChiCuadrado();
+
         return pruebaBondadChiCuadrado.validarHipotesis(chiCuadradoCalculado, gradosLibertad);
     }
 

@@ -6,25 +6,25 @@ import com.simulacion.distribuciones.core.Tabla;
 import java.util.Random;
 
 public class TablaPoisson extends Tabla {
-    private final float media;
+    private final double media;
 
-    public TablaPoisson(float media) {
+    public TablaPoisson(double media) {
         this.media = media;
     }
 
-    public TablaPoisson(long randomSeed, float media) {
+    public TablaPoisson(long randomSeed, double media) {
         super(randomSeed);
         this.media = media;
     }
 
-    public TablaPoisson(Random random, float media) {
+    public TablaPoisson(Random random, double media) {
         super(random);
         this.media = media;
     }
 
     @Override
     protected Iteracion crearIteracion(int iteracion, float random) {
-        float valor = this.calcularValue(random);
+        int valor = this.calcularValue(random);
         return new Iteracion(iteracion, random, valor);
     }
 
@@ -33,12 +33,13 @@ public class TablaPoisson extends Tabla {
         this.iteraciones.add(iteracion);
     }
 
-    private float calcularValue(float rnd) {
+    private int calcularValue(float rnd) {
         double p = 1.0;
         int x = -1;
         double A = Math.exp(-media);
 
         do {
+            rnd = (float) Math.random();
             x++;
             p *= rnd;
         } while (p >= A);

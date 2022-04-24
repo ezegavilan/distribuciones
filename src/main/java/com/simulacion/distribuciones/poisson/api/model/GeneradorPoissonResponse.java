@@ -13,4 +13,5 @@ import lombok.NoArgsConstructor;
 public class GeneradorPoissonResponse {
     private TablaDto tabla;
     private HistogramaPoissonDto histograma;
+    private boolean pruebaBondadChiCuadrado;
 }

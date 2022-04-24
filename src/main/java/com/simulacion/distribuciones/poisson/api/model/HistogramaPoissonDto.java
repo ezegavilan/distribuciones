@@ -13,4 +13,5 @@ import java.util.List;
 @Builder
 public class HistogramaPoissonDto {
     private List<IntervaloPoissonDto> intervalos;
+    private boolean pruebaBondadChiCuadrado;
 }
